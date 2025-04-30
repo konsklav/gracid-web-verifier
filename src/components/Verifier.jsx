@@ -1,7 +1,17 @@
-import presentationDefinition from '../definitions/gracid-presentation-definition.json';
 import React, { useState } from 'react';
+import { QRCode } from 'qrcode.react';
+import presentationDefinition from '../definitions/gracid-presentation-definition.json';
+
+function generateNonce() {
+    return crypto.randomUUID(); // works in modern browsers
+  }  
 
 function Verifier() {
+  const [nonce] = useState(generateNonce());
+
+ {/* Temp, it will change when we have set the correct api backend and have its link */}
+  const verificationUrl = `https://your-verifier-backend.com/verify?nonce=${nonce}`;
+  
   const [clicked, setClicked] = useState(false);
 
   const handleClick = () => {
@@ -12,15 +22,19 @@ function Verifier() {
   return (
     <div style={{ padding: '2rem', textAlign: 'center' }}>
       <h1>Greek Academic ID Verifier</h1>
-      {/* This is just to check that the presentation definition can be rendered and used by React/JS */}
-      {/* <p><strong>Definition ID:</strong> {presentationDefinition.presentation_definition.id}</p> */}
-      {/* <pre>{JSON.stringify(presentationDefinition, null, 2)}</pre> */}
+
       <button onClick={handleClick} style={{ padding: '0.5rem 1rem', fontSize: '1rem' }}>
         Start Verification
       </button>
 
       {/* This appears after click */}
       {clicked && <p>QR code coming soon...</p>}
+      
+      <div>
+        <h2>Scan to Verify</h2>
+        <QRCode value={verificationUrl} size={200} />
+        <p><code>{verificationUrl}</code></p>
+      </div>
     </div>
   );
 }
