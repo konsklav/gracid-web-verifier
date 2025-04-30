@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { QRCode } from 'qrcode.react';
+import QRCode from 'react-qr-code';
 import presentationDefinition from '../definitions/gracid-presentation-definition.json';
 
 function generateNonce() {
-    return crypto.randomUUID(); // works in modern browsers
+    return crypto.randomUUID();
   }  
 
 function Verifier() {
@@ -11,7 +11,7 @@ function Verifier() {
 
  {/* Temp, it will change when we have set the correct api backend and have its link */}
   const verificationUrl = `https://your-verifier-backend.com/verify?nonce=${nonce}`;
-  
+
   const [clicked, setClicked] = useState(false);
 
   const handleClick = () => {
