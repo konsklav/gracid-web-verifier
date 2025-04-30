@@ -13,7 +13,7 @@ This web verifier uses the [eudiw restful service](https://github.com/eu-digital
 - ```bash
   npm i vite
   ```
-- Start the application:
+- Run the application:
 - ```bash
-  npm start
+  npm run dev
   ```
