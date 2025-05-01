@@ -7,17 +7,28 @@ function generateNonce() {
   }  
 
 function Verifier() {
-  const [nonce] = useState(generateNonce());
-
- {/* Temp, it will change when we have set the correct api backend and have its link */}
-  const verificationUrl = `https://your-verifier-backend.com/verify?nonce=${nonce}`;
-
   const [clicked, setClicked] = useState(false);
 
+  const [nonce, setNonce] = useState(null);
+
+  const [definition, setDefinition] = useState(null);
+
   const handleClick = () => {
+    const newNonce = generateNonce();
+
+    // Deep clone the JSON object (presentation definition) to avoid mutating the imported default
+    const clonedDefinition = JSON.parse(JSON.stringify(presentationDefinition));
+    // Inject the new nonce
+    clonedDefinition.nonce = newNonce;
+
+    // Set states
+    setNonce(newNonce);
+    setDefinition(clonedDefinition);
     setClicked(true);
-    console.log("Button clicked!");
   };
+
+  // Temp, it will change when we have set the correct api backend and have its link
+  const verificationUrl = nonce ? `https://your-verifier-backend.com/verify?nonce=${nonce}`  : ''; // Only gets a value if nonce is not null
 
   return (
     <div style={{ padding: '2rem', textAlign: 'center' }}>
@@ -27,14 +38,13 @@ function Verifier() {
         Start Verification
       </button>
 
-      {/* This appears after click */}
-      {clicked && <p>QR code coming soon...</p>}
-      
-      <div>
-        <h2>Scan to Verify</h2>
-        <QRCode value={verificationUrl} size={200} />
-        <p><code>{verificationUrl}</code></p>
-      </div>
+      {clicked && definition && (
+        <div>
+          <h2>Scan to Verify</h2>
+          <QRCode value={verificationUrl} size={200} />
+          <p><code>{verificationUrl}</code></p>
+        </div>
+      )}
     </div>
   );
 }
