@@ -27,8 +27,8 @@ function Verifier() {
     setClicked(true);
   };
 
-  // Temp, it will change when we have set the correct api backend and have its link
-  const verificationUrl = nonce ? `https://your-verifier-backend.com/verify?nonce=${nonce}`  : ''; // Only gets a value if nonce is not null
+  // Temp, it will get the response from the backend so that it can generate the qrcode
+  const verificationUrl = ""
 
   return (
     <div style={{ padding: '2rem', textAlign: 'center' }}>
