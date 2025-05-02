@@ -1,114 +1,110 @@
 {
-    "type": "vp_token",
-    "presentation_definition": {
-      "id": "verify-greek-academic-id",
-      "input_descriptors": [
-        {
-          "id": "eu.europa.ec.eudi.greek_academic_id.1",
-          "format": {
-            "mso_mdoc": {
-              "alg": [
-                "ES256"
-              ]
-            }
-          },
-          "constraints": {
-            "limit_disclosure": "preferred",
-            "fields": [
-              {
-                "path": [
-                  "$['eu.europa.ec.eudi.greek_academic_id.1']['given_name']"
-                ],
-                "intent_to_retain": false
-              },
-              {
-                "path": [
-                  "$['eu.europa.ec.eudi.greek_academic_id.1']['family_name']"
-                ],
-                "intent_to_retain": false
-              },
-              {
-                "path": [
-                  "$['eu.europa.ec.eudi.greek_academic_id.1']['given_name_gr']"
-                ],
-                "intent_to_retain": false
-              },
-              {
-                "path": [
-                  "$['eu.europa.ec.eudi.greek_academic_id.1']['family_name_gr']"
-                ],
-                "intent_to_retain": false
-              },
-              {
-                "path": [
-                  "$['eu.europa.ec.eudi.greek_academic_id.1']['place_of_residence']"
-                ],
-                "intent_to_retain": false
-              },
-              {
-                "path": [
-                  "$['eu.europa.ec.eudi.greek_academic_id.1']['student_type']"
-                ],
-                "intent_to_retain": false
-              },
-              {
-                "path": [
-                  "$['eu.europa.ec.eudi.greek_academic_id.1']['department']"
-                ],
-                "intent_to_retain": false
-              },
-              {
-                "path": [
-                  "$['eu.europa.ec.eudi.greek_academic_id.1']['academic_institution_name']"
-                ],
-                "intent_to_retain": false
-              },
-              {
-                "path": [
-                  "$['eu.europa.ec.eudi.greek_academic_id.1']['academic_institution_location']"
-                ],
-                "intent_to_retain": false
-              },
-              {
-                "path": [
-                  "$['eu.europa.ec.eudi.greek_academic_id.1']['student_registration_number']"
-                ],
-                "intent_to_retain": false
-              },
-              {
-                "path": [
-                  "$['eu.europa.ec.eudi.greek_academic_id.1']['document_number']"
-                ],
-                "intent_to_retain": false
-              },
-              {
-                "path": [
-                  "$['eu.europa.ec.eudi.greek_academic_id.1']['issuing_authority']"
-                ],
-                "intent_to_retain": false
-              },
-              {
-                "path": [
-                  "$['eu.europa.ec.eudi.greek_academic_id.1']['issuance_date']"
-                ],
-                "intent_to_retain": false
-              },
-              {
-                "path": [
-                  "$['eu.europa.ec.eudi.greek_academic_id.1']['expiry_date']"
-                ],
-                "intent_to_retain": false
-              },
-              {
-                "path": [
-                  "$['eu.europa.ec.eudi.greek_academic_id.1']['portrait']"
-                ],
-                "intent_to_retain": false
-              }
-            ]
-          }
+  "id": "verify-greek-academic-id",
+  "input_descriptors": [
+    {
+      "id": "eu.europa.ec.eudi.greek_academic_id.1",
+      "format": {
+        "mso_mdoc": {
+          "alg": [
+            "ES256"
+          ]
         }
-      ]
-    },
-    "nonce": "random-UUID"
-  }
+      },
+      "constraints": {
+        "limit_disclosure": "preferred",
+        "fields": [
+          {
+            "path": [
+              "$['eu.europa.ec.eudi.greek_academic_id.1']['given_name']"
+            ],
+            "intent_to_retain": false
+          },
+          {
+            "path": [
+              "$['eu.europa.ec.eudi.greek_academic_id.1']['family_name']"
+            ],
+            "intent_to_retain": false
+          },
+          {
+            "path": [
+              "$['eu.europa.ec.eudi.greek_academic_id.1']['given_name_gr']"
+            ],
+            "intent_to_retain": false
+          },
+          {
+            "path": [
+              "$['eu.europa.ec.eudi.greek_academic_id.1']['family_name_gr']"
+            ],
+            "intent_to_retain": false
+          },
+          {
+            "path": [
+              "$['eu.europa.ec.eudi.greek_academic_id.1']['place_of_residence']"
+            ],
+            "intent_to_retain": false
+          },
+          {
+            "path": [
+              "$['eu.europa.ec.eudi.greek_academic_id.1']['student_type']"
+            ],
+            "intent_to_retain": false
+          },
+          {
+            "path": [
+              "$['eu.europa.ec.eudi.greek_academic_id.1']['department']"
+            ],
+            "intent_to_retain": false
+          },
+          {
+            "path": [
+              "$['eu.europa.ec.eudi.greek_academic_id.1']['academic_institution_name']"
+            ],
+            "intent_to_retain": false
+          },
+          {
+            "path": [
+              "$['eu.europa.ec.eudi.greek_academic_id.1']['academic_institution_location']"
+            ],
+            "intent_to_retain": false
+          },
+          {
+            "path": [
+              "$['eu.europa.ec.eudi.greek_academic_id.1']['student_registration_number']"
+            ],
+            "intent_to_retain": false
+          },
+          {
+            "path": [
+              "$['eu.europa.ec.eudi.greek_academic_id.1']['document_number']"
+            ],
+            "intent_to_retain": false
+          },
+          {
+            "path": [
+              "$['eu.europa.ec.eudi.greek_academic_id.1']['issuing_authority']"
+            ],
+            "intent_to_retain": false
+          },
+          {
+            "path": [
+              "$['eu.europa.ec.eudi.greek_academic_id.1']['issuance_date']"
+            ],
+            "intent_to_retain": false
+          },
+          {
+            "path": [
+              "$['eu.europa.ec.eudi.greek_academic_id.1']['expiry_date']"
+            ],
+            "intent_to_retain": false
+          },
+          {
+            "path": [
+              "$['eu.europa.ec.eudi.greek_academic_id.1']['portrait']"
+            ],
+            "intent_to_retain": false
+          }
+        ]
+      }
+    }
+  ]
+}
