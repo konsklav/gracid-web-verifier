@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import QRCode from 'react-qr-code';
 import presentationDefinition from '../definitions/gracid-presentation-definition.json';
 
@@ -14,7 +14,7 @@ function Verifier() {
   const [transactionId, setTransactionId] = useState(null);
   const [clientId, setClientId] = useState(null); 
   const [requestUri, setRequestUri] = useState(null);
-  const [requestUriMethod, setRequestUriMethod] = useState("post");
+  const [requestUriMethod, setRequestUriMethod] = useState("get");
 
   const [status, setStatus] = useState('pending');
   const [loading, setLoading] = useState(false);
@@ -58,11 +58,33 @@ function Verifier() {
 
       setClicked(true);
     } catch (error) {
-      console.error('Error creating verification session:', error);
+      console.error('Error creating verification session: ', error);
     } finally {
       setLoading(false);
     }
   };
+
+  // Effect for polling the response from the wallet
+  useEffect(() => {
+    if (!transactionId || status === 'verified') return;
+  
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch(`https://dev.verifier-backend.eudiw.dev/ui/presentations/${transactionId}`);
+        const data = await res.json();
+  
+        if (data?.vp_token) {
+          setStatus('verified');
+          clearInterval(interval); // Stop polling
+          console.log('Verification Success: ', data);
+        }
+      } catch (err) {
+        console.error('Error polling verification result: ', err);
+      }
+    }, 5000); // Polls every 5 seconds
+  
+    return () => clearInterval(interval); // Cleanup the interval after unmounting of the component or change in the effects target variables
+  }, [transactionId, status]);
 
   return (
     <div style={{ padding: '2rem', textAlign: 'center' }}>
