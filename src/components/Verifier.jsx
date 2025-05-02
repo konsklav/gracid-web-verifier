@@ -3,46 +3,87 @@ import QRCode from 'react-qr-code';
 import presentationDefinition from '../definitions/gracid-presentation-definition.json';
 
 function generateNonce() {
-    return crypto.randomUUID();
-  }  
+  return crypto.randomUUID();
+}
 
 function Verifier() {
   const [clicked, setClicked] = useState(false);
 
   const [nonce, setNonce] = useState(null);
 
-  const [definition, setDefinition] = useState(null);
+  const [transactionId, setTransactionId] = useState(null);
+  const [clientId, setClientId] = useState(null); 
+  const [requestUri, setRequestUri] = useState(null);
+  const [requestUriMethod, setRequestUriMethod] = useState("post");
 
-  const handleClick = () => {
+  const [status, setStatus] = useState('pending');
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = async () => {
+    setLoading(true);
     const newNonce = generateNonce();
 
-    // Deep clone the JSON object (presentation definition) to avoid mutating the imported default
-    const clonedDefinition = JSON.parse(JSON.stringify(presentationDefinition));
-    // Inject the new nonce
-    clonedDefinition.nonce = newNonce;
-
-    // Set states
+    // Set nonce state
     setNonce(newNonce);
-    setDefinition(clonedDefinition);
-    setClicked(true);
-  };
+    
+    try {
+      const response = await fetch('https://dev.verifier-backend.eudiw.dev/ui/presentations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({  // Basic request body, will check if some are not needed in the future.
+          "type": "vp_token",
+          "presentation_definition": presentationDefinition,
+          "dcql_query": null,
+          "nonce": newNonce,
+          "response_mode": "direct_post",
+          "jar_mode": "by_reference",
+          "request_uri_method": requestUriMethod
+        })
+      });
 
-  // Temp, it will get the response from the backend so that it can generate the qrcode
-  const verificationUrl = ""
+      if (!response.ok) {
+        throw new Error('Failed to create verification session.');
+      }
+
+      // Get response data
+      const data = await response.json();
+
+      // Set states based on response data
+      setTransactionId(data.transactionId);
+      setClientId(data.client_id);
+      setRequestUri(data.request_uri);
+      setRequestUriMethod(data.request_uri_method);
+
+      setClicked(true);
+    } catch (error) {
+      console.error('Error creating verification session:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div style={{ padding: '2rem', textAlign: 'center' }}>
       <h1>Greek Academic ID Verifier</h1>
 
-      <button onClick={handleClick} style={{ padding: '0.5rem 1rem', fontSize: '1rem' }}>
-        Start Verification
+      {!clicked && (
+      <button
+        onClick={handleClick}
+        disabled={loading}
+        style={{ padding: '0.5rem 1rem', fontSize: '1rem' }}
+      >
+        {loading ? 'Starting Verification...' : 'Start Verification'}
       </button>
+      )}
 
-      {clicked && definition && (
+      {clicked && requestUri && (
         <div>
           <h2>Scan to Verify</h2>
-          <QRCode value={verificationUrl} size={200} />
-          <p><code>{verificationUrl}</code></p>
+          <QRCode value={requestUri} size={200} />
+          <p><code>{requestUri}</code></p>
+          <p>Status: {status}</p>
         </div>
       )}
     </div>
