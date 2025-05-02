@@ -14,7 +14,7 @@ function Verifier() {
   const [transactionId, setTransactionId] = useState(null);
   const [clientId, setClientId] = useState(null); 
   const [requestUri, setRequestUri] = useState(null);
-  const [requestUriMethod, setRequestUriMethod] = useState("get");
+  const [requestUriMethod, setRequestUriMethod] = useState("post");
 
   const [status, setStatus] = useState('pending');
   const [loading, setLoading] = useState(false);
