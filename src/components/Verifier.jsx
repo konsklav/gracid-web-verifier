@@ -51,7 +51,7 @@ function Verifier() {
       const data = await response.json();
 
       // Set states based on response data
-      setTransactionId(data.transactionId);
+      setTransactionId(data.transaction_id);
       setClientId(data.client_id);
       setRequestUri(data.request_uri);
       setRequestUriMethod(data.request_uri_method);
@@ -69,13 +69,13 @@ function Verifier() {
       <h1>Greek Academic ID Verifier</h1>
 
       {!clicked && (
-      <button
-        onClick={handleClick}
-        disabled={loading}
-        style={{ padding: '0.5rem 1rem', fontSize: '1rem' }}
-      >
-        {loading ? 'Starting Verification...' : 'Start Verification'}
-      </button>
+        <button
+          onClick={handleClick}
+          disabled={loading}
+          style={{ padding: '0.5rem 1rem', fontSize: '1rem' }}
+        >
+          {loading ? 'Starting Verification...' : 'Start Verification'}
+        </button>
       )}
 
       {clicked && requestUri && (
