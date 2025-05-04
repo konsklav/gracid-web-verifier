@@ -17,6 +17,8 @@ function Verifier() {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState('pending');
 
+  const [credentials, setCredentials] = useState([]);
+
   const handleClick = async () => {
     // Set state
     setLoading(true);
@@ -102,10 +104,22 @@ function Verifier() {
 
       {clicked && requestUri && (
         <div>
-          <h2>Scan to Verify</h2>
-          <QRCode value={qrCodeUri} size={200} />
-          <p><code>{qrCodeUri}</code></p>
-          <p>Status: {status}</p>
+          {status !== 'verified' ? (
+            <>
+              <h2>Scan to Verify</h2>
+              <QRCode value={qrCodeUri} size={200} />
+              <p><code>{qrCodeUri}</code></p>
+              <p>Status: Verification Pending . . .</p>
+            </>
+          ) : (
+            <>
+              <h2>Verification Successful!</h2>
+              <h3>Retrieved Credentials:</h3>
+              <pre style={{ textAlign: 'left', background: '#f4f4f4', padding: '1rem', borderRadius: '8px', overflowX: 'auto' }}>
+                {JSON.stringify(credentials, null, 2)} // Temp, I'll see how it's going to get rendered!
+              </pre>
+            </>
+          )}
         </div>
       )}
     </div>
