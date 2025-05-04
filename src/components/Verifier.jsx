@@ -20,11 +20,10 @@ function Verifier() {
   const [loading, setLoading] = useState(false);
 
   const handleClick = async () => {
+    // Set states
     setLoading(true);
-    const newNonce = generateNonce();
 
-    // Set nonce state
-    setNonce(newNonce);
+    setNonce(generateNonce());
     
     try {
       const response = await fetch('https://dev.verifier-backend.eudiw.dev/ui/presentations', {
@@ -36,7 +35,7 @@ function Verifier() {
           "type": "vp_token",
           "presentation_definition": presentationDefinition,
           "dcql_query": null,
-          "nonce": newNonce,
+          "nonce": nonce,
           "response_mode": "direct_post",
           "jar_mode": "by_reference",
           "request_uri_method": requestUriMethod
