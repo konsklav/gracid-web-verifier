@@ -14,8 +14,8 @@ function Verifier() {
   const [requestUri, setRequestUri] = useState(null);
   const [requestUriMethod, setRequestUriMethod] = useState("post");
 
-  const [status, setStatus] = useState('pending');
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState('pending');
 
   const handleClick = async () => {
     // Set state
@@ -29,7 +29,7 @@ function Verifier() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({  // Basic request body, will check if some are not needed in the future.
+        body: JSON.stringify({  // Basic request body
           "type": "vp_token",
           "presentation_definition": presentationDefinition,
           "dcql_query": null,
@@ -47,7 +47,7 @@ function Verifier() {
       // Get response data
       const data = await response.json();
 
-      // Set states based on response data
+      // Set response states
       setTransactionId(data.transaction_id);
       setClientId(data.client_id);
       setRequestUri(data.request_uri);
@@ -61,7 +61,8 @@ function Verifier() {
     }
   };
 
-  const qrCodeUrl = `openid4vp://?request_uri=${requestUri}`; // Temp, not working yet
+  // Create QR-Code Uri based on the response
+  const qrCodeUri = `eudi-openid4vp://?client_id=${encodeURIComponent(clientId)}&request_uri=${encodeURIComponent(requestUri)}&request_uri_method=${encodeURIComponent(requestUriMethod)}`;
 
   // Effect for polling the response from the wallet
   useEffect(() => {
@@ -102,8 +103,8 @@ function Verifier() {
       {clicked && requestUri && (
         <div>
           <h2>Scan to Verify</h2>
-          <QRCode value={qrCodeUrl} size={200} />
-          <p><code>{qrCodeUrl}</code></p>
+          <QRCode value={qrCodeUri} size={200} />
+          <p><code>{qrCodeUri}</code></p>
           <p>Status: {status}</p>
         </div>
       )}
