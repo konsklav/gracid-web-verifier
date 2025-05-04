@@ -9,8 +9,6 @@ function generateNonce() {
 function Verifier() {
   const [clicked, setClicked] = useState(false);
 
-  const [nonce, setNonce] = useState(null);
-
   const [transactionId, setTransactionId] = useState(null);
   const [clientId, setClientId] = useState(null); 
   const [requestUri, setRequestUri] = useState(null);
@@ -20,10 +18,10 @@ function Verifier() {
   const [loading, setLoading] = useState(false);
 
   const handleClick = async () => {
-    // Set states
+    // Set state
     setLoading(true);
 
-    setNonce(generateNonce());
+    const nonce = generateNonce();
     
     try {
       const response = await fetch('https://dev.verifier-backend.eudiw.dev/ui/presentations', {
@@ -62,6 +60,8 @@ function Verifier() {
       setLoading(false);
     }
   };
+
+  const qrCodeUrl = `openid4vp://?request_uri=${requestUri}`; // Temp, not working yet
 
   // Effect for polling the response from the wallet
   useEffect(() => {
@@ -102,8 +102,8 @@ function Verifier() {
       {clicked && requestUri && (
         <div>
           <h2>Scan to Verify</h2>
-          <QRCode value={requestUri} size={200} />
-          <p><code>{requestUri}</code></p>
+          <QRCode value={qrCodeUrl} size={200} />
+          <p><code>{qrCodeUrl}</code></p>
           <p>Status: {status}</p>
         </div>
       )}
