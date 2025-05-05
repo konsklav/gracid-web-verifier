@@ -1,125 +1,45 @@
-import React, { useState , useEffect } from 'react';
-import QRCode from 'react-qr-code';
-import presentationDefinition from '../definitions/gracid-presentation-definition.json';
-
-function generateNonce() {
-  return crypto.randomUUID();
-}
+import React, { useState } from 'react';
+// Import components
+import QRCodeDisplay from './QRCodeDisplay';
+import CredentialDisplay from './CredentialDisplay';
+// Import hooks
+import usePolling from '../hooks/usePolling';
+import useCredentialValidation from '../hooks/useCredentialValidation';
+import useSessionInitializer from '../hooks/useSessionInitializer';
 
 function Verifier() {
   const [clicked, setClicked] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
   const [transactionId, setTransactionId] = useState(null);
   const [clientId, setClientId] = useState(null); 
   const [requestUri, setRequestUri] = useState(null);
-  const [requestUriMethod, setRequestUriMethod] = useState("post");
+  const [requestUriMethod, setRequestUriMethod] = useState(null);
 
-  const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState('pending');
 
   const [vpToken, setVpToken] = useState(null);
   const [credentials, setCredentials] = useState([]);
 
-  const handleClick = async () => {
-    // Set state
-    setLoading(true);
+  // Use the Session Initializer Hook
+  const initializeSession = useSessionInitializer({
+    setClicked,
+    setLoading,
+    setTransactionId,
+    setClientId,
+    setRequestUri,
+    setRequestUriMethod
+  });
 
-    const nonce = generateNonce();
-    
-    try {
-      const response = await fetch('https://dev.verifier-backend.eudiw.dev/ui/presentations', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({  // Basic request body
-          "type": "vp_token",
-          "presentation_definition": presentationDefinition,
-          "dcql_query": null,
-          "nonce": nonce,
-          "response_mode": "direct_post",
-          "jar_mode": "by_reference",
-          "request_uri_method": requestUriMethod
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create verification session.');
-      }
-
-      // Get response data
-      const data = await response.json();
-
-      // Set response states
-      setTransactionId(data.transaction_id);
-      setClientId(data.client_id);
-      setRequestUri(data.request_uri);
-      setRequestUriMethod(data.request_uri_method);
-
-      setClicked(true);
-    } catch (error) {
-      console.error('Error creating verification session: ', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Create QR-Code Uri based on the response
+  // Create QR-Code Uri based on the response from the session initializer
   const qrCodeUri = `eudi-openid4vp://?client_id=${encodeURIComponent(clientId)}&request_uri=${encodeURIComponent(requestUri)}&request_uri_method=${encodeURIComponent(requestUriMethod)}`;
 
-  // Effect for polling the response from the wallet
-  useEffect(() => {
-    if (!transactionId || status === 'received' || status === 'verified') return;
+  // Use the Polling Hook
+  usePolling(transactionId, status, setVpToken, setStatus);
   
-    const interval = setInterval(async () => {
-      try {
-        const res = await fetch(`https://dev.verifier-backend.eudiw.dev/ui/presentations/${transactionId}`);
-        const data = await res.json();
-  
-        if (data?.vp_token?.[0]) {
-          setVpToken(data.vp_token[0]);
-          clearInterval(interval); // Stop polling
-          setStatus('received');
-          console.log('Received Wallets Response (vp_token): ', data.vp_token[0]);
-        }
-      } catch (err) {
-        console.error('Error polling verification result: ', err);
-      }
-    }, 5000); // Polls every 5 seconds
-  
-    return () => clearInterval(interval); // Cleanup the interval after unmounting of the component or change in the effects target variables
-  }, [transactionId, status]);
-  
-  // Effect for validating DeviceResponse (retreiving verified credentials)
-  useEffect(() => {
-    if (!vpToken || status === 'verified') return;
-  
-    const validateCredential = async () => {
-      try {
-        const validationRes = await fetch('https://dev.verifier-backend.eudiw.dev/utilities/validations/msoMdoc/deviceResponse', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          body: `device_response=${encodeURIComponent(vpToken)}`
-
-        });
-  
-        if (!validationRes.ok) {
-          throw new Error('Credential validation failed.');
-        }
-  
-        const credentialData = await validationRes.json();
-        setCredentials(credentialData);
-        setStatus('verified');
-        console.log('Credential Data:', credentialData);
-      } catch (err) {
-        console.error('Error during credential validation: ', err);
-      }
-    };
-  
-    validateCredential();
-  }, [vpToken, status]);
+  // Use the Credential Validation Hook
+  useCredentialValidation(vpToken, status, setCredentials, setStatus);
   
   return (
     <div style={{ padding: '2rem', textAlign: 'center' }}>
@@ -127,7 +47,7 @@ function Verifier() {
 
       {!clicked && (
         <button
-          onClick={handleClick}
+          onClick={initializeSession}
           disabled={loading}
           style={{ padding: '0.5rem 1rem', fontSize: '1rem' }}
         >
@@ -137,32 +57,21 @@ function Verifier() {
 
       {clicked && requestUri && (
         <div>
-        {status === 'pending' && (
-          <>
-            <h2>Scan to Verify</h2>
-            <QRCode value={qrCodeUri} size={200} />
-            <p><code>{qrCodeUri}</code></p>
-            <p>Status: Verification Pending . . .</p>
-          </>
-        )}
-    
-        {status === 'received' && (
-          <>
-            <h2>QR Scanned!</h2>
-            <p>Status: Verification in Progress . . .</p>
-          </>
-        )}
-    
-        {status === 'verified' && (
-          <>
-            <h2>Verification Successful!</h2>
-            <h3>Retrieved Credentials:</h3>
-            <pre style={{ textAlign: 'left', background: '#f4f4f4', padding: '1rem', borderRadius: '8px', overflowX: 'auto' }}>
-              {JSON.stringify(credentials, null, 2)}
-            </pre>
-          </>
-        )}
-      </div>
+          {status === 'pending' && (
+            <QRCodeDisplay qrCodeUri={qrCodeUri}/>
+          )}
+
+          {status === 'received' && (
+            <>
+              <h2>QR Scanned!</h2>
+              <p>Status: Verification in Progress . . .</p>
+            </>
+          )}
+
+          {status === 'verified' && (
+            <CredentialDisplay credentials={credentials} />
+          )}
+        </div>
       )}
     </div>
   );
