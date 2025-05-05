@@ -17,6 +17,7 @@ function Verifier() {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState('pending');
 
+  const [vpToken, setVpToken] = useState(null);
   const [credentials, setCredentials] = useState([]);
 
   const handleClick = async () => {
@@ -68,17 +69,18 @@ function Verifier() {
 
   // Effect for polling the response from the wallet
   useEffect(() => {
-    if (!transactionId || status === 'verified') return;
+    if (!transactionId || status === 'received' || status === 'verified') return;
   
     const interval = setInterval(async () => {
       try {
         const res = await fetch(`https://dev.verifier-backend.eudiw.dev/ui/presentations/${transactionId}`);
         const data = await res.json();
   
-        if (data?.vp_token) {
-          setStatus('verified');
+        if (data?.vp_token?.[0]) {
+          setVpToken(data.vp_token[0]);
           clearInterval(interval); // Stop polling
-          console.log('Verification Success: ', data);
+          setStatus('received');
+          console.log('Received Wallets Response (vp_token): ', data.vp_token[0]);
         }
       } catch (err) {
         console.error('Error polling verification result: ', err);
@@ -87,7 +89,38 @@ function Verifier() {
   
     return () => clearInterval(interval); // Cleanup the interval after unmounting of the component or change in the effects target variables
   }, [transactionId, status]);
+  
+  // Effect for validating DeviceResponse (retreiving verified credentials)
+  useEffect(() => {
+    if (!vpToken || status === 'verified') return;
+  
+    const validateCredential = async () => {
+      try {
+        const validationRes = await fetch('https://dev.verifier-backend.eudiw.dev/utilities/validations/msoMdoc/deviceResponse', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: `device_response=${encodeURIComponent(vpToken)}`
 
+        });
+  
+        if (!validationRes.ok) {
+          throw new Error('Credential validation failed.');
+        }
+  
+        const credentialData = await validationRes.json();
+        setCredentials(credentialData);
+        setStatus('verified');
+        console.log('Credential Data:', credentialData);
+      } catch (err) {
+        console.error('Error during credential validation: ', err);
+      }
+    };
+  
+    validateCredential();
+  }, [vpToken, status]);
+  
   return (
     <div style={{ padding: '2rem', textAlign: 'center' }}>
       <h1>Greek Academic ID Verifier</h1>
@@ -104,23 +137,32 @@ function Verifier() {
 
       {clicked && requestUri && (
         <div>
-          {status !== 'verified' ? (
-            <>
-              <h2>Scan to Verify</h2>
-              <QRCode value={qrCodeUri} size={200} />
-              <p><code>{qrCodeUri}</code></p>
-              <p>Status: Verification Pending . . .</p>
-            </>
-          ) : (
-            <>
-              <h2>Verification Successful!</h2>
-              <h3>Retrieved Credentials:</h3>
-              <pre style={{ textAlign: 'left', background: '#f4f4f4', padding: '1rem', borderRadius: '8px', overflowX: 'auto' }}>
-                {JSON.stringify(credentials, null, 2)} // Temp, I'll see how it's going to get rendered!
-              </pre>
-            </>
-          )}
-        </div>
+        {status === 'pending' && (
+          <>
+            <h2>Scan to Verify</h2>
+            <QRCode value={qrCodeUri} size={200} />
+            <p><code>{qrCodeUri}</code></p>
+            <p>Status: Verification Pending . . .</p>
+          </>
+        )}
+    
+        {status === 'received' && (
+          <>
+            <h2>QR Scanned!</h2>
+            <p>Status: Verification in Progress . . .</p>
+          </>
+        )}
+    
+        {status === 'verified' && (
+          <>
+            <h2>Verification Successful!</h2>
+            <h3>Retrieved Credentials:</h3>
+            <pre style={{ textAlign: 'left', background: '#f4f4f4', padding: '1rem', borderRadius: '8px', overflowX: 'auto' }}>
+              {JSON.stringify(credentials, null, 2)}
+            </pre>
+          </>
+        )}
+      </div>
       )}
     </div>
   );
