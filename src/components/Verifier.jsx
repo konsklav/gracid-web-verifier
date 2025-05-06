@@ -32,7 +32,7 @@ function Verifier() {
     setRequestUriMethod
   });
 
-  // Create QR-Code Uri based on the response from the session initializer
+  // Create QR-Code Uri based on the response from the session initializer (rerenders everytime the state of the attributes used changes)
   const qrCodeUri = `eudi-openid4vp://?client_id=${encodeURIComponent(clientId)}&request_uri=${encodeURIComponent(requestUri)}&request_uri_method=${encodeURIComponent(requestUriMethod)}`;
 
   // Use the Polling Hook
