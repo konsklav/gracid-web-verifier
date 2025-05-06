@@ -1,29 +1,29 @@
 {
-    "credentials": [
-      {
-        "id": "query_0",
-        "format": "mso_mdoc",
-        "meta": {
-          "doctype_value": "eu.europa.ec.eudi.greek_academic_id.1"
-        },
-        "claims": [
-          { "namespace": "eu.europa.ec.eudi.greek_academic_id.1","claim_name": "given_name" },
-          { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "family_name" },
-          { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "given_name_gr" },
-          { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "family_name_gr" },
-          { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "place_of_residence" },
-          { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "student_type" },
-          { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "department" },
-          { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "academic_institution_name" },
-          { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "academic_institution_location" },
-          { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "student_registration_number" },
-          { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "document_number" },
-          { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "issuing_authority" },
-          { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "issuance_date" },
-          { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "expiry_date" },
-          { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "portrait" }
-        ]
-      }
-    ]
-  }
+  "credentials": [
+    {
+      "id": "query_0",
+      "format": "mso_mdoc",
+      "meta": {
+        "doctype_value": "eu.europa.ec.eudi.greek_academic_id.1"
+      },
+      "claims": [
+        { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "given_name" },
+        { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "family_name" },
+        { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "given_name_gr" },
+        { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "family_name_gr" },
+        { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "place_of_residence" },
+        { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "student_type" },
+        { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "department" },
+        { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "academic_institution_name" },
+        { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "academic_institution_location" },
+        { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "student_registration_number" },
+        { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "document_number" },
+        { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "issuing_authority" },
+        { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "issuance_date" },
+        { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "expiry_date" },
+        { "namespace": "eu.europa.ec.eudi.greek_academic_id.1", "claim_name": "portrait" }
+      ]
+    }
+  ]
+}
   
