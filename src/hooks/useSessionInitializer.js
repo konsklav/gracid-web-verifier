@@ -1,12 +1,13 @@
 import { useCallback } from 'react';
-import presentationDefinition from '../definitions/gracid-presentation-definition.json';
+import presentationDefinition from '../queries/gracid-presentation-definition.json';
+import dcqlQuery from '../queries/gracid-dcql.json';
 
 const useSessionInitializer = ({ setClicked, setLoading, setTransactionId, setClientId, setRequestUri, setRequestUriMethod }) => {
   const initializeSession = useCallback(async () => {
     // Set loading state
     setLoading(true);
 
-    const nonce = crypto.randomUUID();
+    const nonce = crypto.randomUUID();s
 
     try {
         const response = await fetch('https://dev.verifier-backend.eudiw.dev/ui/presentations', {
