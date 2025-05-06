@@ -7,7 +7,7 @@ const useSessionInitializer = ({ setClicked, setLoading, setTransactionId, setCl
     // Set loading state
     setLoading(true);
 
-    const nonce = crypto.randomUUID();s
+    const nonce = crypto.randomUUID();
 
     try {
         const response = await fetch('https://dev.verifier-backend.eudiw.dev/ui/presentations', {
@@ -17,8 +17,8 @@ const useSessionInitializer = ({ setClicked, setLoading, setTransactionId, setCl
           },
           body: JSON.stringify({  // Basic request body
             "type": "vp_token",
-            "presentation_definition": presentationDefinition,
-            "dcql_query": null,
+            "presentation_definition": null,
+            "dcql_query": dcqlQuery,
             "nonce": nonce,
             "response_mode": "direct_post",
             "jar_mode": "by_reference",
