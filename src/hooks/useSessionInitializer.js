@@ -26,7 +26,9 @@ const useSessionInitializer = ({ setClicked, setLoading, setTransactionId, setCl
         });
 
         if (!response.ok) {
-            throw new Error('Failed to create verification session.');
+            const text = await response.text();
+            console.error('Error creating verification session:', response.status, text);
+            throw new Error('Failed to create verification session.')
         }
     
         // Get response data
