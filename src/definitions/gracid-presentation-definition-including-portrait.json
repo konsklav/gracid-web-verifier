@@ -96,6 +96,12 @@
               "$['eu.europa.ec.eudi.greek_academic_id.1']['expiry_date']"
             ],
             "intent_to_retain": false
+          },
+          {
+            "path": [
+              "$['eu.europa.ec.eudi.greek_academic_id.1']['portrait']"
+            ],
+            "intent_to_retain": false
           }
         ]
       }
