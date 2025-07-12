@@ -8,9 +8,9 @@ const QRCodeDisplay = ({ qrCodeUri }) => {
     <>
       <h2>Scan to Verify</h2>
       <QRCode value={qrCodeUri} size={200} />
-      <p>
+      {/* <p>
         <code>{qrCodeUri}</code>
-      </p>
+      </p> */}
       <p>Status: Verification Pending . . .</p>
     </>
   );
