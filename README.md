@@ -9,11 +9,7 @@ This web verifier uses the [EUDIW restful service](https://github.com/eu-digital
 - [React](https://react.dev)
 
 ## Run with NPM
-- Install Vite (if not installed):
-- ```bash
-  npm install vite
-  ```
-- Install dependencies (if not installed):
+- Install dependencies:
 - ```bash
   npm install react-qr-code
   ```
