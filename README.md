@@ -11,7 +11,7 @@ This web verifier uses the [EUDIW restful service](https://github.com/eu-digital
 ## Run with NPM
 - Install dependencies:
 - ```bash
-  npm install react-qr-code
+  npm install
   ```
 - Run the application:
 - ```bash
